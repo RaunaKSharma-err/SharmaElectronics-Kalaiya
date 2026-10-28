@@ -14,16 +14,119 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      products: {
+        Row: {
+          brand: string | null
+          category: string
+          created_at: string
+          description: string | null
+          features: Json
+          gallery: string[]
+          id: string
+          image_url: string | null
+          is_active: boolean
+          is_featured: boolean
+          is_new: boolean
+          low_stock_threshold: number
+          name: string
+          original_price_npr: number | null
+          price_npr: number
+          short_description: string | null
+          sku: string | null
+          slug: string
+          specifications: Json
+          stock_quantity: number
+          tags: string[]
+          updated_at: string
+        }
+        Insert: {
+          brand?: string | null
+          category: string
+          created_at?: string
+          description?: string | null
+          features?: Json
+          gallery?: string[]
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          is_new?: boolean
+          low_stock_threshold?: number
+          name: string
+          original_price_npr?: number | null
+          price_npr: number
+          short_description?: string | null
+          sku?: string | null
+          slug: string
+          specifications?: Json
+          stock_quantity?: number
+          tags?: string[]
+          updated_at?: string
+        }
+        Update: {
+          brand?: string | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          features?: Json
+          gallery?: string[]
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          is_new?: boolean
+          low_stock_threshold?: number
+          name?: string
+          original_price_npr?: number | null
+          price_npr?: number
+          short_description?: string | null
+          sku?: string | null
+          slug?: string
+          specifications?: Json
+          stock_quantity?: number
+          tags?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      adjust_stock: {
+        Args: { _delta?: number; _product_id: string; _set?: number }
+        Returns: number
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +253,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
