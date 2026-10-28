@@ -5,7 +5,7 @@ import { categories } from "@/data/categories";
 import { ProductGrid } from "./ProductCard";
 
 export type Sort = "featured" | "price-asc" | "price-desc" | "name";
-export interface CatalogState { q?: string; category?: string; brand?: string; sort?: Sort }
+export interface CatalogState { q?: string | undefined; category?: string | undefined; brand?: string | undefined; sort?: Sort | undefined }
 
 export function filterProducts(list: Product[], s: CatalogState): Product[] {
   const q = s.q?.toLowerCase().trim();

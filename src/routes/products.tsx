@@ -8,10 +8,10 @@ const sorts: Sort[] = ["featured", "price-asc", "price-desc", "name"];
 
 export const Route = createFileRoute("/products")({
   validateSearch: (s: Record<string, unknown>): CatalogState => ({
-    q: typeof s.q === "string" && s.q ? s.q : undefined,
-    category: typeof s.category === "string" && s.category ? s.category : undefined,
-    brand: typeof s.brand === "string" && s.brand ? s.brand : undefined,
-    sort: sorts.includes(s.sort as Sort) ? (s.sort as Sort) : undefined,
+    q: typeof s["q"] === "string" && s["q"] ? s["q"] : undefined,
+    category: typeof s["category"] === "string" && s["category"] ? s["category"] : undefined,
+    brand: typeof s["brand"] === "string" && s["brand"] ? s["brand"] : undefined,
+    sort: sorts.includes(s["sort"] as Sort) ? (s["sort"] as Sort) : undefined,
   }),
   head: () => pageHead({
     title: "All Products & Prices — Sharma Electronics Kalaiya",
