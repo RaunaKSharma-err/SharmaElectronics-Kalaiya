@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Store settings live only in src/config/store.ts and catalog data in src/data/*.ts; components read from there so the owner edits one place.
