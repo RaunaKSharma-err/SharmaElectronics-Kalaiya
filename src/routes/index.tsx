@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, Eye, MapPin, MessageCircle, Search } from "lucide-react";
 import hero from "@/assets/hero.jpg";
 import { categories, getCategory } from "@/data/categories";
-import { featuredProducts, products } from "@/data/products";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { featured, productsQuery } from "@/lib/catalog-queries";
 import { ProductGrid } from "@/components/products/ProductCard";
 import { store } from "@/config/store";
 import { generalInquiryLink } from "@/lib/whatsapp";
@@ -16,14 +17,15 @@ export const Route = createFileRoute("/")({
     path: "/",
     jsonLd: [{ "@context": "https://schema.org", "@type": "WebSite", name: store.name, ...(store.websiteUrl ? { url: store.websiteUrl } : {}) }],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(productsQuery()),
   component: Home,
 });
 
-const pick = (slug: string) => products.find((p) => p.slug === slug)!;
-
 function Home() {
-  const phone = pick("smartphone-5g-128gb");
-  const ac = pick("inverter-split-ac-1-5-ton");
+  const { data: products } = useSuspenseQuery(productsQuery());
+  const feat = featured(products);
+  const big0 = ["refrigerators", "washing-machines", "televisions", "air-conditioners"];
+  const promos = [feat.find((p) => !big0.includes(p.category)), feat.find((p) => big0.includes(p.category) && p.category !== "refrigerators")].filter((p): p is NonNullable<typeof p> => !!p);
   const big = ["refrigerators", "washing-machines", "televisions", "air-conditioners", "kitchen-appliances"];
   const sections = [
     { title: "Home Appliance Essentials", items: products.filter((p) => big.includes(p.category)).slice(0, 4), to: "refrigerators" },
@@ -60,7 +62,7 @@ function Home() {
               </div>
             </div>
           </div>
-          {[phone, ac].map((p) => (
+          {promos.map((p) => (
             <Link key={p.slug} to="/product/$slug" params={{ slug: p.slug }}
               className="group relative grid grid-cols-[1fr_auto] items-end overflow-hidden rounded-3xl border border-ink-border bg-ink-3 p-6">
               <div className="relative z-10">
@@ -105,7 +107,7 @@ function Home() {
             <h2 id="feat-h" className="font-serif text-4xl sm:text-5xl">Featured Products</h2>
             <Link to="/products" className="text-sm font-semibold hover:text-primary">View all →</Link>
           </div>
-          <ProductGrid products={featuredProducts().slice(0, 8)} />
+          <ProductGrid products={feat.slice(0, 8)} />
         </div>
       </section>
 
@@ -136,7 +138,7 @@ function Home() {
       </section>
 
       {/* COLLECTIONS */}
-      {sections.map((s) => (
+      {sections.filter((s) => s.items.length).map((s) => (
         <section key={s.title} className="pt-20">
           <div className="container-x">
             <div className="mb-6 flex items-end justify-between">

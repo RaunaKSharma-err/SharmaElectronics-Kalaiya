@@ -1,7 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Check, MessageCircle } from "lucide-react";
 import { getCategory } from "@/data/categories";
-import { getProduct, relatedProducts } from "@/data/products";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { productQuery, productsQuery, related } from "@/lib/catalog-queries";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { AvailabilityDot, ProductGrid } from "@/components/products/ProductCard";
 import { formatPrice } from "@/lib/format";
@@ -9,11 +10,14 @@ import { productOrderLink } from "@/lib/whatsapp";
 import { absUrl, breadcrumbLd, pageHead } from "@/lib/seo";
 import { store } from "@/config/store";
 
-const schemaAvail = { in_stock: "InStock", limited: "LimitedAvailability", out_of_stock: "OutOfStock", on_request: "PreOrder" } as const;
+const schemaAvail = { in_stock: "InStock", low_stock: "LimitedAvailability", out_of_stock: "OutOfStock" } as const;
 
 export const Route = createFileRoute("/product/$slug")({
-  loader: ({ params }) => {
-    const product = getProduct(params.slug);
+  loader: async ({ params, context }) => {
+    const [product] = await Promise.all([
+      context.queryClient.ensureQueryData(productQuery(params.slug)),
+      context.queryClient.ensureQueryData(productsQuery()),
+    ]);
     if (!product) throw notFound();
     return { product, category: getCategory(product.category)! };
   },
@@ -27,9 +31,9 @@ export const Route = createFileRoute("/product/$slug")({
       path, type: "product",
       jsonLd: [
         breadcrumbLd([{ name: "Home", path: "/" }, { name: c.name, path: `/category/${c.slug}` }, { name: p.name, path }]),
-        { "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.description, sku: p.id,
+        { "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.description, sku: p.id, image: p.image.startsWith("http") ? [p.image] : undefined,
           ...(p.brand ? { brand: { "@type": "Brand", name: p.brand } } : {}),
-          ...(store.pricesVerified ? { offers: { "@type": "Offer", priceCurrency: "NPR", price: p.priceNPR, availability: `https://schema.org/${schemaAvail[p.availability]}`, url: absUrl(path), seller: { "@type": "Organization", name: store.name } } } : {}) },
+          ...(store.pricesVerified ? { offers: { "@type": "Offer", priceCurrency: "NPR", price: p.priceNPR, availability: `https://schema.org/${schemaAvail[p.stockStatus]}`, url: absUrl(path), seller: { "@type": "Organization", name: store.name } } } : {}) },
       ],
     });
   },
@@ -38,6 +42,7 @@ export const Route = createFileRoute("/product/$slug")({
 
 function ProductPage() {
   const { product: p, category: c } = Route.useLoaderData();
+  const { data: all } = useSuspenseQuery(productsQuery());
   const discount = p.originalPriceNPR && p.originalPriceNPR > p.priceNPR;
   return (
     <div className="container-x py-10">
@@ -54,7 +59,7 @@ function ProductPage() {
             <span className="text-4xl font-extrabold tracking-tight">{formatPrice(p.priceNPR)}</span>
             {discount && <span className="text-muted-foreground line-through">{formatPrice(p.originalPriceNPR!)}</span>}
           </div>
-          <div className="mt-2"><AvailabilityDot a={p.availability} /></div>
+          <div className="mt-2"><AvailabilityDot a={p.stockStatus} /></div>
           <a href={productOrderLink(p, absUrl(`/product/${p.slug}`))} target="_blank" rel="noopener noreferrer"
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-whatsapp py-4 font-semibold text-whatsapp-foreground transition hover:brightness-110 sm:w-auto sm:px-10 sm:inline-flex">
             <MessageCircle className="h-5 w-5" /> Order on WhatsApp
@@ -67,7 +72,7 @@ function ProductPage() {
           )}
           <h2 className="mt-8 font-semibold">Description</h2>
           <p className="mt-2 text-muted-foreground">{p.description}</p>
-          {p.specifications && (
+          {Object.keys(p.specifications).length > 0 && (
             <>
               <h2 className="mt-8 font-semibold">Specifications</h2>
               <table className="mt-3 w-full overflow-hidden rounded-xl border border-border bg-card text-sm">
@@ -87,7 +92,7 @@ function ProductPage() {
       </div>
       <section className="mt-20">
         <h2 className="mb-6 font-serif text-4xl">You may also like</h2>
-        <ProductGrid products={relatedProducts(p)} />
+        <ProductGrid products={related(all, p)} />
       </section>
     </div>
   );
