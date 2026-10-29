@@ -8,6 +8,13 @@
       "when": 1793189178321,
       "tag": "0000_products_admin_inventory",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793259463192,
+      "tag": "0001_product_images_read",
+      "breakpoints": true
     }
   ]
 }
