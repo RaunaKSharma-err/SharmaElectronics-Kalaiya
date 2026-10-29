@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { products } from "@/data/products";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { productsQuery } from "@/lib/catalog-queries";
 import { CatalogBrowser, type CatalogState, type Sort } from "@/components/products/CatalogBrowser";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { breadcrumbLd, pageHead } from "@/lib/seo";
@@ -19,11 +20,13 @@ export const Route = createFileRoute("/products")({
     path: "/products",
     jsonLd: [breadcrumbLd([{ name: "Home", path: "/" }, { name: "All Products", path: "/products" }])],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(productsQuery()),
   component: ProductsPage,
 });
 
 function ProductsPage() {
   const search = Route.useSearch();
+  const { data: products } = useSuspenseQuery(productsQuery());
   const navigate = useNavigate({ from: "/products" });
   return (
     <div className="container-x py-10">

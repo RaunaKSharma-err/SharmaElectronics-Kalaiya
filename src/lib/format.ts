@@ -2,9 +2,6 @@ export function formatPrice(npr: number): string {
   return `NPR ${Math.round(npr).toLocaleString("en-IN")}`;
 }
 
-export const availabilityLabel = {
-  in_stock: "In stock",
-  limited: "Limited stock",
-  out_of_stock: "Out of stock",
-  on_request: "Ask for availability",
-} as const;
+export function slugify(s: string): string {
+  return s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 90);
+}

@@ -1,15 +1,17 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { categories, getCategory } from "@/data/categories";
-import { productsInCategory } from "@/data/products";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { inCategory, productsQuery } from "@/lib/catalog-queries";
 import { CatalogBrowser, type CatalogState } from "@/components/products/CatalogBrowser";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { breadcrumbLd, pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/category/$slug")({
-  loader: ({ params }) => {
+  loader: async ({ params, context }) => {
     const category = getCategory(params.slug);
     if (!category) throw notFound();
+    await context.queryClient.ensureQueryData(productsQuery());
     return { category };
   },
   head: ({ loaderData, params }) => loaderData ? pageHead({
@@ -24,7 +26,8 @@ export const Route = createFileRoute("/category/$slug")({
 function CategoryPage() {
   const { category } = Route.useLoaderData();
   const [state, setState] = useState<CatalogState>({});
-  const items = productsInCategory(category.slug);
+  const { data: products } = useSuspenseQuery(productsQuery());
+  const items = inCategory(products, category.slug);
   return (
     <div className="container-x py-10">
       <Breadcrumbs items={[{ name: "Home", to: "/" }, { name: "Categories", to: "/categories" }, { name: category.name }]} />

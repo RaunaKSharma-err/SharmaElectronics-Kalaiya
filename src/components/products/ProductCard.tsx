@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { MessageCircle } from "lucide-react";
 import type { Product } from "@/types/product";
-import { availabilityLabel, formatPrice } from "@/lib/format";
+import { formatPrice } from "@/lib/format";
+import { stockLabel } from "@/lib/stock";
 import { productOrderLink } from "@/lib/whatsapp";
 import { absUrl } from "@/lib/seo";
 
-export function AvailabilityDot({ a }: { a: Product["availability"] }) {
-  const c = a === "in_stock" ? "bg-success" : a === "limited" ? "bg-warning" : a === "out_of_stock" ? "bg-destructive" : "bg-muted-foreground";
-  return <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><span className={`h-1.5 w-1.5 rounded-full ${c}`} />{availabilityLabel[a]}</span>;
+export function AvailabilityDot({ a }: { a: Product["stockStatus"] }) {
+  const c = a === "in_stock" ? "bg-success" : a === "low_stock" ? "bg-warning" : "bg-destructive";
+  return <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><span className={`h-1.5 w-1.5 rounded-full ${c}`} />{stockLabel[a]}</span>;
 }
 
 export function ProductCard({ product }: { product: Product }) {
@@ -32,7 +33,7 @@ export function ProductCard({ product }: { product: Product }) {
           <span className="text-lg font-bold tracking-tight">{formatPrice(product.priceNPR)}</span>
           {discount > 0 && <span className="text-xs text-muted-foreground line-through">{formatPrice(product.originalPriceNPR!)}</span>}
         </div>
-        <AvailabilityDot a={product.availability} />
+        <AvailabilityDot a={product.stockStatus} />
         <div className="mt-2 grid grid-cols-2 gap-2">
           <Link to="/product/$slug" params={{ slug: product.slug }}
             className="rounded-lg border border-border px-2 py-2 text-center text-xs font-semibold transition hover:border-foreground sm:text-sm">Details</Link>
