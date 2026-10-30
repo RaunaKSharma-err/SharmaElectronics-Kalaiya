@@ -18,9 +18,13 @@ import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminInventoryRouteImport } from './routes/admin.inventory'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
+import { Route as AdminProductsIndexRouteImport } from './routes/admin.products.index'
+import { Route as AdminProductsNewRouteImport } from './routes/admin.products.new'
+import { Route as AdminProductsIdEditRouteImport } from './routes/admin.products.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -67,6 +71,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminInventoryRoute = AdminInventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin_/login',
   path: '/admin/login',
@@ -82,6 +91,21 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
   path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
+  id: '/products/new',
+  path: '/products/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsIdEditRoute = AdminProductsIdEditRouteImport.update({
+  id: '/products/$id/edit',
+  path: '/products/$id/edit',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -92,10 +116,14 @@ export interface FileRoutesByFullPath {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/inventory': typeof AdminInventoryRoute
   '/admin/login': typeof AdminLoginRoute
   '/category/$slug': typeof CategorySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products/': typeof AdminProductsIndexRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -105,10 +133,14 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/inventory': typeof AdminInventoryRoute
   '/admin/login': typeof AdminLoginRoute
   '/category/$slug': typeof CategorySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products': typeof AdminProductsIndexRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -120,10 +152,14 @@ export interface FileRoutesById {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/inventory': typeof AdminInventoryRoute
   '/admin_/login': typeof AdminLoginRoute
   '/category/$slug': typeof CategorySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products/': typeof AdminProductsIndexRoute
+  '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,10 +172,14 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/products'
     | '/sitemap.xml'
+    | '/admin/inventory'
     | '/admin/login'
     | '/category/$slug'
     | '/product/$slug'
     | '/admin/'
+    | '/admin/products/new'
+    | '/admin/products/'
+    | '/admin/products/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -149,10 +189,14 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/products'
     | '/sitemap.xml'
+    | '/admin/inventory'
     | '/admin/login'
     | '/category/$slug'
     | '/product/$slug'
     | '/admin'
+    | '/admin/products/new'
+    | '/admin/products'
+    | '/admin/products/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -163,10 +207,14 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/products'
     | '/sitemap.xml'
+    | '/admin/inventory'
     | '/admin_/login'
     | '/category/$slug'
     | '/product/$slug'
     | '/admin/'
+    | '/admin/products/new'
+    | '/admin/products/'
+    | '/admin/products/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -248,6 +296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/inventory': {
+      id: '/admin/inventory'
+      path: '/inventory'
+      fullPath: '/admin/inventory'
+      preLoaderRoute: typeof AdminInventoryRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin_/login': {
       id: '/admin_/login'
       path: '/admin/login'
@@ -269,15 +324,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/products/': {
+      id: '/admin/products/'
+      path: '/products'
+      fullPath: '/admin/products/'
+      preLoaderRoute: typeof AdminProductsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products/new': {
+      id: '/admin/products/new'
+      path: '/products/new'
+      fullPath: '/admin/products/new'
+      preLoaderRoute: typeof AdminProductsNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products/$id/edit': {
+      id: '/admin/products/$id/edit'
+      path: '/products/$id/edit'
+      fullPath: '/admin/products/$id/edit'
+      preLoaderRoute: typeof AdminProductsIdEditRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminInventoryRoute: typeof AdminInventoryRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminProductsNewRoute: typeof AdminProductsNewRoute
+  AdminProductsIndexRoute: typeof AdminProductsIndexRoute
+  AdminProductsIdEditRoute: typeof AdminProductsIdEditRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminInventoryRoute: AdminInventoryRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminProductsNewRoute: AdminProductsNewRoute,
+  AdminProductsIndexRoute: AdminProductsIndexRoute,
+  AdminProductsIdEditRoute: AdminProductsIdEditRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
