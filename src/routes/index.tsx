@@ -15,6 +15,7 @@ export const Route = createFileRoute("/")({
     title: "Sharma Electronics Kalaiya — Electronics & Home Appliances in Bara",
     description: "Electronics shop in Kalaiya, Bara. Browse refrigerators, washing machines, TVs, ACs, phones and more with visible prices — order on WhatsApp.",
     path: "/",
+    image: hero,
     jsonLd: [{ "@context": "https://schema.org", "@type": "WebSite", name: store.name, ...(store.websiteUrl ? { url: store.websiteUrl } : {}) }],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(productsQuery()),

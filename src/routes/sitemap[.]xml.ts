@@ -9,9 +9,16 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async ({ request }) => {
         const products = await listActiveProducts();
         const base = (store.websiteUrl || new URL(request.url).origin).replace(/\/$/, "");
-        const paths = ["/", "/products", "/categories", "/about", "/contact", "/privacy-policy",
-          ...categories.map((c) => `/category/${c.slug}`), ...products.map((p) => `/product/${p.slug}`)];
-        const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((p) => `<url><loc>${base}${p}</loc></url>`).join("")}</urlset>`;
+const lastmod = new Date().toISOString().slice(0, 10);
+const entries = (p: string, priority = "0.7", changefreq = "weekly") =>
+  `<url><loc>${base}${p}</loc><lastmod>${lastmod}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
+const staticPaths = ["/", "/products", "/categories", "/about", "/contact", "/privacy-policy"];
+const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[
+  entries("/", "1.0", "daily"),
+  ...staticPaths.slice(1).map((p) => entries(p)),
+  ...categories.map((c) => entries(`/category/${c.slug}`)),
+  ...products.map((p) => entries(`/product/${p.slug}`, "0.8")),
+].join("")}</urlset>`;
         return new Response(xml, { headers: { "Content-Type": "application/xml" } });
       },
     },

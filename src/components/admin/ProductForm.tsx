@@ -2,7 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { ImagePlus, Plus, Trash2, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/data/categories";
@@ -91,13 +91,13 @@ export function ProductForm({ initial, signed = {} }: { initial?: AdminProduct; 
     finally { setBusy(false); }
   };
 
-  const Field = ({ id, label, children, hint }: { id: string; label: string; children: React.ReactNode; hint?: string }) => (
+  const Field = useCallback(({ id, label, children, hint }: { id: string; label: string; children: React.ReactNode; hint?: string }) => (
     <div className="space-y-1.5">
       <label htmlFor={id} className="text-sm font-medium">{label}</label>
       {children}
       {errors[id] ? <p className="text-xs text-destructive">{errors[id]}</p> : hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
     </div>
-  );
+  ), [errors]);
 
   return (
     <form onSubmit={submit} className="grid gap-6 xl:grid-cols-[1fr_340px]" noValidate>

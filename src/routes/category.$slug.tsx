@@ -18,6 +18,7 @@ export const Route = createFileRoute("/category/$slug")({
     title: `${loaderData.category.name} Price in Kalaiya, Bara — Sharma Electronics`,
     description: loaderData.category.seoDescription,
     path: `/category/${params.slug}`,
+    image: loaderData.category.image,
     jsonLd: [breadcrumbLd([{ name: "Home", path: "/" }, { name: "Categories", path: "/categories" }, { name: loaderData.category.name, path: `/category/${params.slug}` }])],
   }) : { meta: [{ title: "Category not found — Sharma Electronics" }, { name: "robots", content: "noindex" }] },
   component: CategoryPage,

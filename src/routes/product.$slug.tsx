@@ -28,7 +28,7 @@ export const Route = createFileRoute("/product/$slug")({
     return pageHead({
       title: `${p.brand ? p.brand + " " : ""}${p.name} — ${formatPrice(p.priceNPR)} | Sharma Electronics Kalaiya`,
       description: `${p.shortDescription} Listed at ${formatPrice(p.priceNPR)} at Sharma Electronics, Kalaiya, Bara. Order on WhatsApp.`,
-      path, type: "product",
+      path, type: "product", image: p.image,
       jsonLd: [
         breadcrumbLd([{ name: "Home", path: "/" }, { name: c.name, path: `/category/${c.slug}` }, { name: p.name, path }]),
         { "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.description, sku: p.id, image: p.image.startsWith("http") ? [p.image] : undefined,
