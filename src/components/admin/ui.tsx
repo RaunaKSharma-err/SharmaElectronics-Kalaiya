@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { StockStatus } from "@/types/product";
 import { stockLabel } from "@/lib/stock";
 
-export function PageTitle({ title, sub, action }: { title: string; sub?: string; action?: ReactNode }) {
+export function PageTitle({ title, sub, action }: { title: string; sub?: string | undefined; action?: ReactNode }) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>

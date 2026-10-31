@@ -26,8 +26,8 @@ export const Route = createFileRoute("/product/$slug")({
     const { product: p, category: c } = loaderData;
     const path = `/product/${params.slug}`;
     return pageHead({
-      title: p.seoTitle ?? `${p.brand ? p.brand + " " : ""}${p.name} — ${formatPrice(p.priceNPR)} | Sharma Electronics Kalaiya`,
-      description: p.seoDescription ?? `${p.shortDescription} Listed at ${formatPrice(p.priceNPR)} at Sharma Electronics, Kalaiya, Bara. Order on WhatsApp.`,
+      title: `${p.brand ? p.brand + " " : ""}${p.name} — ${formatPrice(p.priceNPR)} | Sharma Electronics Kalaiya`,
+      description: `${p.shortDescription} Listed at ${formatPrice(p.priceNPR)} at Sharma Electronics, Kalaiya, Bara. Order on WhatsApp.`,
       path, type: "product",
       jsonLd: [
         breadcrumbLd([{ name: "Home", path: "/" }, { name: c.name, path: `/category/${c.slug}` }, { name: p.name, path }]),

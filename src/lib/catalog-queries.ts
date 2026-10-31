@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getActiveProduct, listActiveProducts } from "@/server/catalog.functions";
+import { getActiveProduct, listActiveProducts } from "@/lib/catalog.functions";
 import type { Product } from "@/types/product";
 
 export const productsQuery = () =>
