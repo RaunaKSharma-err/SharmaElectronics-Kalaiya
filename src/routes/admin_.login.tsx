@@ -5,9 +5,9 @@ import { Logo } from "@/components/layout/Logo";
 
 export const Route = createFileRoute("/admin_/login")({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>) => ({
+  validateSearch: (s: Record<string, unknown>): { redirect?: string | undefined; denied?: 1 | undefined } => ({
     redirect: typeof s["redirect"] === "string" && s["redirect"].startsWith("/admin") ? (s["redirect"] as string) : undefined,
-    denied: s["denied"] ? 1 : undefined,
+    denied: s["denied"] ? (1 as const) : undefined,
   }),
   head: () => ({ meta: [{ title: "Admin sign in — Sharma Electronics" }, { name: "robots", content: "noindex, nofollow" }] }),
   component: Login,
