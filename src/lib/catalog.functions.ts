@@ -9,8 +9,8 @@ const PUBLIC_COLUMNS =
   "id, slug, name, brand, category, short_description, description, price_npr, original_price_npr, image_url, gallery, specifications, features, tags, is_featured, is_new, stock_quantity, low_stock_threshold, created_at";
 
 function publicClient() {
-  const url = process.env["SUPABASE_URL"]!;
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
+  const url = process.env["SUPABASE_URL"] || "https://hzuifprrrxzhtsoifbod.supabase.co";
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"] || "sb_publishable_GEHkmuzfXmHWL32kxcL_7w_rXd8V60B";
   return createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
     global: {
