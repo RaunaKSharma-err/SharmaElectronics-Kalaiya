@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Boxes, LayoutDashboard, LogOut, Menu, Package, Plus, Store, X } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdmin } from "@/server/admin.functions";
+import { checkAdmin } from "@/lib/admin.functions";
 import { Logo } from "@/components/layout/Logo";
 
 export const Route = createFileRoute("/admin")({

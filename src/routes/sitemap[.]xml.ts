@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { categories } from "@/data/categories";
-import { listActiveProducts } from "@/server/catalog.functions";
+import { listActiveProducts } from "@/lib/catalog.functions";
 import { store } from "@/config/store";
 
 export const Route = createFileRoute("/sitemap.xml")({

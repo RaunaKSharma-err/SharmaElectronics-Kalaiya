@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Minus, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { adminListProducts, adminSetStock } from "@/server/admin.functions";
+import { adminListProducts, adminSetStock } from "@/lib/admin.functions";
 import { stockStatus } from "@/lib/stock";
 import type { AdminProduct, StockStatus } from "@/types/product";
 import { ErrorBox, Loading, PageTitle, StockBadge, inputCls } from "@/components/admin/ui";

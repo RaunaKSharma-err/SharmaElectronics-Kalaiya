@@ -6,7 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { categories } from "@/data/categories";
-import { adminSaveProduct } from "@/server/admin.functions";
+import { adminSaveProduct } from "@/lib/admin.functions";
 import { productInput, safeImagePath, validateImageFile } from "@/lib/product-validation";
 import { resolveImage } from "@/lib/images";
 import { slugify } from "@/lib/format";

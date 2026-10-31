@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Plus } from "lucide-react";
-import { adminDashboard } from "@/server/admin.functions";
+import { adminDashboard } from "@/lib/admin.functions";
 import { ErrorBox, Loading, PageTitle, StatusBadge, StockBadge, btnPrimary } from "@/components/admin/ui";
 import { formatPrice } from "@/lib/format";
 import { stockStatus } from "@/lib/stock";

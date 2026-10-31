@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { adminDeleteProduct, adminListProducts } from "@/server/admin.functions";
+import { adminDeleteProduct, adminListProducts } from "@/lib/admin.functions";
 import { categories, getCategory } from "@/data/categories";
 import { resolveImage } from "@/lib/images";
 import { formatPrice } from "@/lib/format";
