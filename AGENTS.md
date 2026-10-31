@@ -9,4 +9,8 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- Store settings live only in src/config/store.ts and catalog data in src/data/*.ts; components read from there so the owner edits one place.
+- Store settings live only in src/config/store.ts; categories in src/data/categories.ts.
+- Products live in the database; storefront reads only through src/lib/catalog.functions.ts (publishable client, active rows) and admin writes only through src/lib/admin.functions.ts (requireSupabaseAuth + is_admin check, RLS enforces too) so authorization is never client-side.
+- Admin access = row in public.user_roles with role 'admin'; RLS and storage policies call public.is_admin(). Never derive admin from user metadata.
+- Product images: private "product-images" bucket (public buckets are blocked in this workspace), served via signed URLs; "seed/..." image paths map to bundled sample photos in src/lib/images.ts.
+- Stock status is computed only by src/lib/stock.ts; stock changes go through the adjust_stock() SQL function for atomic, non-negative updates.
